@@ -34,17 +34,18 @@ module tb_fsm_datapath;
     // Clock generation
     always #5 clk = ~clk;
 
-    // State checking task
+    // Explicit assertion for state verification
     task check_state;
         input [2:0] expected_state;
         begin
-            if (state !== expected_state) begin
+            assert (state === expected_state)
+            begin
+                $display("PASS: State = %b", state);
+            end
+            else begin
                 $display("FAIL: Expected state %b, got %b",
                          expected_state, state);
                 errors = errors + 1;
-            end
-            else begin
-                $display("PASS: State = %b", state);
             end
         end
     endtask
@@ -61,17 +62,20 @@ module tb_fsm_datapath;
         $dumpfile("Waveforms/fsm_waveform.vcd");
         $dumpvars(0, tb_fsm_datapath);
 
-        // TEST 1: Reset
+        // TEST 1: Reset verification
         @(posedge clk);
         #1;
+
         check_state(IDLE);
 
-        if (result !== 0 || done !== 0) begin
+        assert ((result === 4'd0) && (done === 1'b0))
+        begin
+            $display("PASS: Reset outputs");
+        end
+        else begin
             $display("FAIL: Reset outputs incorrect");
             errors = errors + 1;
         end
-        else
-            $display("PASS: Reset outputs");
 
         // Release reset
         @(negedge clk);
@@ -96,33 +100,49 @@ module tb_fsm_datapath;
         @(negedge clk);
         start = 0;
 
-        // TEST 4: LOAD
+        // TEST 4: LOAD and datapath register capture
         @(posedge clk);
         #1;
+
         check_state(PROCESS);
 
-        // TEST 5: PROCESS
+        assert ((dut.reg_a === 4'd5) &&
+                (dut.reg_b === 4'd7))
+        begin
+            $display("PASS: Datapath registers captured inputs");
+        end
+        else begin
+            $display("FAIL: Datapath input capture incorrect");
+            errors = errors + 1;
+        end
+
+        // TEST 5: PROCESS and arithmetic result
         @(posedge clk);
         #1;
+
         check_state(DONE);
 
-        if (result !== 4'd12) begin
+        assert (result === 4'd12)
+        begin
+            $display("PASS: Datapath result = %d", result);
+        end
+        else begin
             $display("FAIL: Expected result 12, got %d", result);
             errors = errors + 1;
         end
-        else
-            $display("PASS: Datapath result = %d", result);
 
-        // TEST 6: DONE
+        // TEST 6: DONE signal
         @(posedge clk);
         #1;
 
-        if (done !== 1'b1) begin
+        assert (done === 1'b1)
+        begin
+            $display("PASS: DONE signal asserted");
+        end
+        else begin
             $display("FAIL: DONE signal not asserted");
             errors = errors + 1;
         end
-        else
-            $display("PASS: DONE signal asserted");
 
         check_state(IDLE);
 
@@ -133,12 +153,14 @@ module tb_fsm_datapath;
         @(posedge clk);
         #1;
 
-        if (state !== IDLE) begin
+        assert (state === IDLE)
+        begin
+            $display("PASS: Illegal-state recovery");
+        end
+        else begin
             $display("FAIL: Illegal-state recovery failed");
             errors = errors + 1;
         end
-        else
-            $display("PASS: Illegal-state recovery");
 
         // TEST 8: Reset during operation
         @(negedge clk);
@@ -154,16 +176,20 @@ module tb_fsm_datapath;
         @(posedge clk);
         #1;
 
-        if (state !== IDLE || result !== 0 || done !== 0) begin
+        assert ((state === IDLE) &&
+                (result === 4'd0) &&
+                (done === 1'b0))
+        begin
+            $display("PASS: Reset recovery");
+        end
+        else begin
             $display("FAIL: Reset recovery failed");
             errors = errors + 1;
         end
-        else
-            $display("PASS: Reset recovery");
 
         // Final result
         if (errors == 0)
-            $display("\nALL FSM TESTS PASSED!");
+            $display("\nALL FSM ASSERTIONS AND TESTS PASSED!");
         else
             $display("\nFSM TESTS FAILED: %0d errors", errors);
 
