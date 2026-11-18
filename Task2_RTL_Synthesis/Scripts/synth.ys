@@ -1,0 +1,18 @@
+
+# Read the ALU RTL design
+read_verilog RTL/alu_4bit.v
+
+# Set the top-level module
+hierarchy -check -top alu_4bit
+
+# Perform RTL synthesis
+synth -top alu_4bit
+
+# Check the synthesized design
+check
+
+# Generate synthesized Verilog netlist
+write_verilog -noattr Reports/alu_4bit_netlist.v
+
+# Generate synthesis statistics report
+tee -o Reports/synthesis_report.txt stat

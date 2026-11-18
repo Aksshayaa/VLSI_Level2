@@ -1,0 +1,9 @@
+# Generated simulation executables
+Task1_Parameterized_RTL/Results/counter_sim
+Task2_RTL_Synthesis/Reports/alu_sim
+Task3_FSM_Verification/Results/fsm_sim
+
+# Editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db
