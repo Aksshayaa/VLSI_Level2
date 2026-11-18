@@ -1,4 +1,3 @@
-
 # FSM State Transition and Datapath Flow
 
 ## 1. FSM State Transition Diagram
@@ -22,7 +21,8 @@ stateDiagram-v2
     LOAD --> IDLE: Reset
     PROCESS --> IDLE: Reset
     DONE --> IDLE: Reset
-    PROCESS --> IDLE: Illegal state recovery
+state ILLEGAL
+    ILLEGAL --> IDLE: Default recovery
 ```
 
 ## 2. Datapath Flow Diagram
@@ -69,3 +69,4 @@ The FSM performs the following operations:
 All FSM testbench checks passed, including reset, legal state transitions, datapath register capture, arithmetic result, DONE signal, illegal-state recovery and reset during operation.
 
 **Simulation status: ALL FSM ASSERTIONS AND TESTS PASSED!**
+
