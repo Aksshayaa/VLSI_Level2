@@ -49,6 +49,8 @@ Designed a four-state controller with an integrated datapath.
 - Legal state-transition verification
 - Illegal-state recovery
 - GTKWave waveform analysis
+- Explicit SystemVerilog assertion-based verification.
+- FSM state-transition and datapath-flow diagrams.
 
 ## Repository Structure
 
@@ -56,6 +58,12 @@ Designed a four-state controller with an integrated datapath.
 VLSI_Level2/
 │
 ├── README.md
+├── Screenshots/
+│   ├── task1_sim.png
+│   ├── task2_output.png
+│   ├── task2_sim.png
+│   ├── task3_output.png
+│   └── task3_sim.png
 │
 ├── Task1_Parameterized_RTL/
 │   ├── RTL/
@@ -69,20 +77,20 @@ VLSI_Level2/
 │   └── Reports/
 │
 └── Task3_FSM_Verification/
+    ├── FSM_State_Dataflow.md
     ├── RTL/
     ├── TB/
     ├── Waveforms/
     └── Results/
-```
 
 ## Verification Summary
 
-| Task   | Verification                           |
-| ------ | -------------------------------------- |
-| Task 1 | Counter simulation passed              |
-| Task 2 | 7 ALU test cases passed                |
-| Task 2 | Yosys synthesis completed successfully |
-| Task 3 | 8 FSM verification checks passed       |
+| Task   | Verification                                            |
+| ------ | --------------------------------------                  |
+| Task 1 | Counter simulation passed                               |
+| Task 2 | 7 ALU test cases passed                                 |
+| Task 2 | Yosys synthesis completed successfully                  |
+| Task 3 | All FSM assertions and verification checks passed       |
 
 ## Screenshots and Verification Evidence
 
@@ -91,6 +99,24 @@ The `Screenshots/` directory contains visual evidence of the simulation waveform
 - Task 1: Counter simulation and waveform
 - Task 2: ALU simulation, waveform and Yosys synthesis
 - Task 3: FSM simulation and waveform
+
+## Assertions and State/Data Flow Diagram
+
+The testbench uses SystemVerilog immediate assertions to verify:
+
+- Reset outputs and IDLE state
+- Legal FSM state transitions
+- Input capture in reg_a and reg_b
+- Correct arithmetic result
+- DONE signal assertion
+- Illegal-state recovery
+- Reset recovery during operation
+
+The FSM state-transition and datapath-flow diagrams
+are documented in FSM_State_Dataflow.md.
+
+Final simulation result:
+ALL FSM ASSERTIONS AND TESTS PASSED!
 
 ## Learning Outcomes
 

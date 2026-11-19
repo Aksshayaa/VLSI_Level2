@@ -99,3 +99,23 @@ gtkwave Waveforms/fsm_waveform.vcd
 ## Conclusion
 
 Successfully designed and verified a four-state FSM with an integrated datapath. Functional verification covered reset behavior, legal state transitions, datapath operation, completion signaling and illegal-state recovery.
+
+## Assertions and State/Data Flow Diagram
+
+The testbench uses SystemVerilog immediate assertions to verify:
+
+- Reset outputs and IDLE state
+- Legal FSM state transitions
+- Input capture in reg_a and reg_b
+- Correct arithmetic result
+- DONE signal assertion
+- Illegal-state recovery
+- Reset recovery during operation
+
+The FSM state-transition and datapath-flow diagrams are documented in `FSM_State_Dataflow.md`.
+
+### Final Verification
+
+All FSM assertions and testbench checks passed successfully using Icarus Verilog with SystemVerilog 2012 support.
+
+Simulation result: **ALL FSM ASSERTIONS AND TESTS PASSED!**
